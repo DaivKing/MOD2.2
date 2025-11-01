@@ -1,7 +1,9 @@
+-- Criação do Banco de Dados.
 CREATE DATABASE verdeVida;
 
 USE verdeVida;
 
+-- Tabela Voluntario.
 CREATE TABLE
     voluntario (
         idvoluntario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -10,6 +12,7 @@ CREATE TABLE
         funcao varchar(50) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Planta.
 CREATE TABLE
     planta (
         idplanta INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -17,12 +20,14 @@ CREATE TABLE
         tipo VARCHAR(20) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Canteiro.
 CREATE TABLE
     canteiro (
         idcanteiro INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         localizacao varchar(100) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Plantio.
 CREATE TABLE
     plantio (
         idplantio INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -36,6 +41,7 @@ CREATE TABLE
         FOREIGN KEY (idplanta) REFERENCES planta (idplanta)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Colheita.
 CREATE TABLE
     colheita (
         idcolheita INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -45,6 +51,7 @@ CREATE TABLE
         FOREIGN KEY (idplantio) REFERENCES plantio (idplantio)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Instituição.
 CREATE TABLE
     instituicao (
         idinstituicao int UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -52,6 +59,7 @@ CREATE TABLE
         endereco VARCHAR(100) NOT NULL
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+-- Tabela Doação.
 CREATE TABLE
     doacao (
         iddoacao int UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -63,6 +71,10 @@ CREATE TABLE
         FOREIGN KEY (idinstituicao) REFERENCES instituicao (idinstituicao)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+
+-- ==================================================================--
+
+-- Inserindo Dados tabela Voluntario.
 insert into
     voluntario (nome, cpf, funcao)
 VALUES
@@ -70,6 +82,7 @@ VALUES
     ('Vinicius', '444.555.666-22', 'Coordenador'),
     ('Clara', '777.888.999-33', 'Assistente');
 
+-- Inserindo Dados tabela Voluntario.
 insert into
     planta (especie, tipo)
 VALUES
@@ -79,6 +92,7 @@ VALUES
     ('Alface', 'Folha'),
     ('Morango', 'Fruta');
 
+-- Inserindo Dados tabela Canteiro.
 insert into
     canteiro (localizacao)
 VALUES
@@ -88,6 +102,7 @@ VALUES
     ('Canteiro 4'),
     ('Canteiro 5');
 
+-- Inserindo Dados tabela Plantio.
 insert INTO
     plantio (
         dataplantio,
@@ -104,6 +119,7 @@ VALUES
     ('2025-09-18', 0.2, 1, 4, 4),
     ('2025-07-22', 0.7, 2, 5, 1);
 
+-- Inserindo Dados tabela Colheita.
 INSERT INTO
     colheita (datacolheita, quantidadecolhida, idplantio)
 VALUES
@@ -113,6 +129,7 @@ VALUES
     ('2025-11-5', '0.8', 1),
     ('2025-9-7', '3.5', 5);
 
+-- Inserindo Dados tabela Instituição.
 insert into
     instituicao (nomeinstituicao, endereco)
 VALUES
@@ -131,6 +148,7 @@ VALUES
     ),
     ('ONG Verde Vale', 'Rua Da Vida,666');
 
+-- Inserindo Dados tabela Doação
 insert into
     doacao (
         idcolheita,
