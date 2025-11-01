@@ -107,9 +107,9 @@ VALUES
 INSERT INTO
     colheita (datacolheita, quantidadecolhida, idplantio)
 VALUES
-    ('2025-10-30', '1.5', 1),
+    ('2025-10-30', '1.5', 4),
     ('2025-11-1', '2', 2),
-    ('2025-11-3', '3.4', 3),
+    ('2025-11-3', '3.4', 2),
     ('2025-11-5', '0.8', 1),
     ('2025-9-7', '3.5', 5);
 
@@ -129,17 +129,14 @@ VALUES
         'Centro Comunitário Vida Nova',
         'Avenida Brasil,456'
     ),
-    (
-        'ONG Verde Vale',
-        'Rua Da Vida,666'
-    );
+    ('ONG Verde Vale', 'Rua Da Vida,666');
 
 insert into
     doacao (
         idcolheita,
         idinstituicao,
         quantidadedoada,
-        datadocao
+        datadoacao
     )
 VALUES
     (3, 1, 1.6, '2025-11-4'),
@@ -147,7 +144,6 @@ VALUES
     (1, 3, 1, '2025-10-31'),
     (5, 4, 2.5, '2025-9-9'),
     (5, 2, 2.5, '2025-9-10');
-
 
 -- 1.
 select
@@ -204,10 +200,44 @@ group by
     nomeinstituicao;
 
 -- 7.
-select
-c.localizacao as Canteiro,
-sum(co.idcolheita) as ColheitasRealizadas
-from canteiro c
-left join pantio p on p.idcanteiro = c.idcanteiro
-left join colheita co on co.colheita = p.idcolheita;
+SELECT DISTINCT
+    c.idCanteiro,
+    c.localizacao
+FROM
+    canteiro c
+    LEFT JOIN plantio p ON p.idCanteiro = c.idCanteiro
+    LEFT JOIN colheita co ON co.idPlantio = p.idPlantio
+WHERE
+    co.idColheita IS NULL;
 
+-- 8.
+SELECT
+    v.nome as NomeVoluntario,
+    COUNT(p.idPlantio) as TotalPlantios
+FROM
+    voluntario v
+    LEFT JOIN plantio p ON p.idVoluntario = v.idVoluntario
+group by
+    v.nome
+order by
+    TotalPlantios desc;
+
+-- 9.
+SELECT DISTINCT
+    pl.especie
+FROM
+    planta pl
+    LEFT JOIN plantio p ON p.idPlanta = pl.idPlanta
+    LEFT JOIN colheita co ON co.idPlantio = p.idPlantio
+WHERE
+    co.idColheita IS NULL;
+
+-- 10.
+select
+    d.idDoacao as DoaçãoReakizada,
+    i.nomeinstituicao as NomeInstituicao
+from
+    doacao d
+    inner join instituicao i on d.idinstituicao = i.idinstituicao
+where
+    datadoacao between '2025-09-01' and '2025-09-30';
