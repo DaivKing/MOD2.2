@@ -1,9 +1,20 @@
+-- =======================================
+-- BANCO DE DADOS: Horta Comunitaria Verde Vida.
+-- OBJETIVO: Gerenciar Voluntarios, cultivos, colheitas e doações.
+-- AUTORES: Vinícius Cunha, Davi Albnes.
+-- =======================================
+
+
 -- Criação do Banco de Dados.
 CREATE DATABASE verdeVida;
 
 USE verdeVida;
 
--- Tabela Voluntario.
+
+-- =============== PRINCIPAIS TABELAS ===============
+
+
+-- Tabela Voluntario: Armazena Nome,CPF e Função dos Voluntarios.
 CREATE TABLE
     voluntario (
         idvoluntario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -12,7 +23,7 @@ CREATE TABLE
         funcao varchar(50) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Planta.
+-- Tabela Planta: Armazena informações sobre especie e tipo das plantas.
 CREATE TABLE
     planta (
         idplanta INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -20,14 +31,14 @@ CREATE TABLE
         tipo VARCHAR(20) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Canteiro.
+-- Tabela Canteiro: Identifica Localização fisica de cada canteiro.
 CREATE TABLE
     canteiro (
         idcanteiro INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         localizacao varchar(100) not null
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Plantio.
+-- Tabela Plantio: Registra cada evento de plantio, relacionando planta, canteiro e voluntário.
 CREATE TABLE
     plantio (
         idplantio INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -41,7 +52,7 @@ CREATE TABLE
         FOREIGN KEY (idplanta) REFERENCES planta (idplanta)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Colheita.
+-- Tabela Colheita: Armazena colheitas realizadas a partir de um plantio específico.
 CREATE TABLE
     colheita (
         idcolheita INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -51,7 +62,7 @@ CREATE TABLE
         FOREIGN KEY (idplantio) REFERENCES plantio (idplantio)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Instituição.
+-- Tabela Instituição: instituições que recebem doações dos produtos colhidos
 CREATE TABLE
     instituicao (
         idinstituicao int UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -59,7 +70,7 @@ CREATE TABLE
         endereco VARCHAR(100) NOT NULL
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
--- Tabela Doação.
+-- Tabela Doação: Registra doações realizadas, vinculando colheita e instituição.
 CREATE TABLE
     doacao (
         iddoacao int UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -71,8 +82,13 @@ CREATE TABLE
         FOREIGN KEY (idinstituicao) REFERENCES instituicao (idinstituicao)
     ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
+    
+-- =========================================================
+-- Inserção de dados.
+-- Dados ficticios para simular funcionamento do sistema
+-- =========================================================
 
--- ==================================================================--
+
 
 -- Inserindo Dados tabela Voluntario.
 insert into
@@ -163,13 +179,13 @@ VALUES
     (5, 4, 2.5, '2025-9-9'),
     (5, 2, 2.5, '2025-9-10');
 
--- 1.
+-- 1)Voluntarios cadastrados e suas respectivas funções.
 select
     *
 from
     voluntario;
 
--- 2.
+-- 2)Plantas cultivadas em cada canteiro com nome do canteiro e data do plantio.
 select
     pl.especie as Especies,
     c.localizacao as NomeCanteiro,
@@ -179,7 +195,7 @@ from
     inner join canteiro c on p.idcanteiro = c.idcanteiro
     inner join planta pl on p.idplanta = pl.idplanta;
 
--- 3.
+-- 3)Nomes dos voluntarios e plantas que cultivaram.
 select
     v.nome as Nome,
     pl.especie as Especie
@@ -188,7 +204,7 @@ from
     inner join voluntario v on p.idvoluntario = v.idvoluntario
     inner join planta pl on p.idplanta = pl.idplanta;
 
--- 4.
+-- 4)Colheitas realizadas mostrando canteiro e quantidade colhida(KG).
 select
     co.idcolheita as Colheita,
     co.datacolheita as DataColhida,
@@ -199,7 +215,7 @@ from
     inner join plantio p on co.idplantio = p.idplantio
     inner join canteiro c on p.idcanteiro = c.idcanteiro;
 
--- 5.
+-- 5)Instituições que receberam doações e quantidades doadas.
 select
     i.nomeinstituicao as Instituicao,
     d.quantidadedoada as QuantidadeDoadaEmKG
@@ -207,7 +223,7 @@ from
     doacao d
     inner join instituicao i on d.idinstituicao = i.idinstituicao;
 
--- 6.
+-- 6)Listar total KG doados por instituição.
 select
     i.nomeinstituicao as Instituicao,
     sum(d.quantidadedoada) as TotalDoadoEmKG
@@ -217,7 +233,7 @@ from
 group by
     nomeinstituicao;
 
--- 7.
+-- 7)Mostrar canteiros que ainda não tiveram colheita(Usando LEFT JOIN)
 SELECT DISTINCT
     c.idCanteiro,
     c.localizacao
@@ -228,7 +244,7 @@ FROM
 WHERE
     co.idColheita IS NULL;
 
--- 8.
+-- 8)Exibir voluntario com maior numero de cultivo(Usando Count e Order BY)
 SELECT
     v.nome as NomeVoluntario,
     COUNT(p.idPlantio) as TotalPlantios
@@ -240,7 +256,7 @@ group by
 order by
     TotalPlantios desc;
 
--- 9.
+-- 9)Mostrar plantas que ainda não foram colhidas.
 SELECT DISTINCT
     pl.especie
 FROM
@@ -250,7 +266,7 @@ FROM
 WHERE
     co.idColheita IS NULL;
 
--- 10.
+-- 10)Doações realizadas em setembro de 2025.
 select
     d.idDoacao as DoaçãoReakizada,
     i.nomeinstituicao as NomeInstituicao
@@ -259,3 +275,7 @@ from
     inner join instituicao i on d.idinstituicao = i.idinstituicao
 where
     datadoacao between '2025-09-01' and '2025-09-30';
+
+-- ===============================================
+-- FIM DO SCRIPT.
+-- ===============================================
