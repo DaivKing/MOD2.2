@@ -39,7 +39,7 @@ Doações:
 - idDoacao (PK)
 - idColheita (FK)
 - idInstituicao (FK)
-- QuantidadeDoad
+- QuantidadeDoada
 - DataDoacao
 
 
