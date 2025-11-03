@@ -43,10 +43,16 @@ Doações:
 - DataDoacao
 
 
-Relação
+Relação:
+
 Voluntário — Plantio : 1 : N (Um voluntário pode realizar varios plantios)
+
 Canteiro — Plantio : 1 : N (Um canteiro pode ter varios plantios)
+
 Planta — Plantio : 1 : N  (Uma planta pode ser plantada diversas vezes)
+
 Plantio — Colheita : 1 : N (Um plantio pode ter varias colheitas)
+
 Colheita — Doacao : N : N (Varias colheitas podem ser dividas em varias doações)
+
 Instituição — Doacao : 1 : N (Uma instituição pode receber varia doações)
