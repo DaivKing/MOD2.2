@@ -2,7 +2,7 @@
 ## Modelo Relacional
 
 Volúntarios:
--idVoluntario (PK)
+- idVoluntario (PK)
 - Nome
 - CPF
 - Funcao
